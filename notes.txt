@@ -34,3 +34,34 @@ cycle
     Takes a list and turns it into an infinitely repeating series
 [ x | x <- [50..100], x `mod` 7 == 3 ]
     Woah!
+
+// ============================================================================
+//                                Typeclasses
+// ============================================================================
+A particular type may be a member of one or more of the following typeclasses:
+Eq
+    Type has == and /= operations
+Ord
+    Has an ordering for <, and belongs to (Eq a) => a -> a-> Bool
+Show
+    Types that can be presented as strings; can use show function
+    show :: Show a => a -> String
+Read
+    Can be read from a string and converted to the type
+Enum
+    Has an explicit ordering and can use the succ and pred functions
+Bounded
+    Has both an upper and a lower bound
+    Supports minBound and maxBound
+Num
+    Type can behave like a number
+Integral
+    Integer numbers
+    fromIntegral x can be used to convert x to a floating point number
+Floating
+    Real numbers
+
+Explicit type annotations
+    Add :: type to the end of the line to tell the compiler what type to generate
+    read "5" :: Int
+    read "5" :: Float

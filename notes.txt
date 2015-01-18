@@ -1,0 +1,36 @@
+// ============================================================================
+//                                   Lists
+// ============================================================================
+: (cons operator)
+    Puts something at the front of the list
+    A:" small cat" --> "A small cat"
+++
+    Puts something at the end of the list
+<, >, =
+    Will do a lexicographical comparison of the lists, starting at the heads
+head
+    First element
+last
+    Last element
+tail
+    All elements except first
+init
+    All elements except last
+null
+    Checks if the list is empty, and should be used over a == []
+take x
+    Extracts the first x elements from the list
+drop x
+    Drops the first x elements from the list and returns the result
+sum, product, minimum, maximum
+    Work as expected on the elements of the list
+a `elem` myList
+    Checks if a is in myList
+[1..20] ['a'..'z']
+    Creates a list of numberrs from 1 to 20 or a to z
+[1,3..20]
+    Creates a list starting at 1 and incrementing by +2 until we get to 20
+cycle
+    Takes a list and turns it into an infinitely repeating series
+[ x | x <- [50..100], x `mod` 7 == 3 ]
+    Woah!

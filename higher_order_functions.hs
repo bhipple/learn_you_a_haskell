@@ -64,3 +64,56 @@ map' f xs = foldr (\x acc -> f x : acc) [] xs
 -- ++ is much more expensive than : it makes sense to come from
 -- the right and prefix the results onto the acc list
 
+-- As a fun note on currying and partial application,
+-- these two definitions are equivalent:
+addThree :: (Num a) => a -> a -> a -> a
+addThree x y z = x + y + z
+
+addThree' :: (Num a) => a -> a -> a -> a
+addThree' = \x -> \y -> \z -> x + y + z
+
+-- When dealing with infinite lists, foldr works while foldl does not.
+-- Intuitively, since foldr starts at some point to the right and folds
+-- leftwards, it will eventually hit the beginning of the list and
+-- terminate; since foldl starts at the beginning and moves rightwards, it
+-- will never reach the end and results in a Bottom computation.
+-- In practice, they all start from the left, but the associativity is
+-- different. From Hoogle:
+--
+-- foldl f z [x1, x2, ..., xn] == (...((z `f` x1) `f` x2) `f`...) `f` xn
+-- foldr f z [x1, x2, ..., xn] == x1 `f` (x2 `f` ... (xn `f` z)...)
+--
+-- Infinite list of booleans:
+isEven = map even [1..]
+
+-- Happily terminates as soon as it finds one even
+hasAnEven = foldr (||) False isEven
+
+-- Bottom!
+-- hasAnEven = foldl (||) False isEven
+
+-- We can also use foldl1 and foldr1. These behave exactly as foldl and
+-- foldr, except instead of taking an explicit accumulator starting value
+-- they use the first element of the list. Both of these return 55:
+sumA = foldr (+) 0 [1..10]
+sumB = foldr1 (+) [1..10]
+-- Note that this variety does not work on the empty list, while foldr does!
+
+-- When building up an intuition for fold ordering, we can use scanl and
+-- scanr, which report all intermediate values of the accumulator
+sumScanr = scanr (+) 0 [1..10]
+sumScanl = scanl (+) 0 [1..10]
+
+-- How many elements does it take for the sum of the square roots of
+-- natural numbers to exceed 1000?
+sqrtSums :: Int
+sqrtSums = length (takeWhile (<1000) (scanl (+) 0 (map sqrt [1..])))
+
+-- Aside from doing right-associative application, the $ operator can be
+-- used to map function application over a list. This takes whatever
+-- function happens to be in the list, and applies 3 to it
+dollarMap :: [Double]
+dollarMap = map ($ 3) [(+4), (*5), sqrt]
+
+applyThree :: Num a => [a -> b] -> [b]
+applyThree = map ($3)
